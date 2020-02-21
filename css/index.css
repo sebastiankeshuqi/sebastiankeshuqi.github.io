@@ -3494,9 +3494,6 @@ img {
 .katex-wrap {
   overflow: auto;
 }
-.katex-wrap::-webkit-scrollbar {
-  display: none;
-}
 .layout_post {
   margin: 40px auto;
   padding: 50px;
