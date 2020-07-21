@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>进化算法-python deap库 | Future Be</title><meta name="description" content="进化算法-python deap库"><meta name="keywords" content="进化算法"><meta name="author" content="Aron Ke"><meta name="copyright" content="Aron Ke"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/test.ico"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="进化算法-python deap库"><meta name="twitter:description" content="进化算法-python deap库"><meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png"><meta property="og:type" content="article"><meta property="og:title" content="进化算法-python deap库"><meta property="og:url" content="http://sebastiankeshuqi.github.io/2020/07/21/pythondeap/"><meta property="og:site_name" content="Future Be"><meta property="og:description" content="进化算法-python deap库"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const autoChangeMode = 'false'
+var t = Cookies.get("theme");
+if (autoChangeMode == '1'){
+const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+if (t === undefined){
+  if (isLightMode) activateLightMode()
+  else if (isDarkMode) activateDarkMode()
+  else if (isNotSpecified || hasNoSupport){
+    console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+    now = new Date();
+    hour = now.getHours();
+    isNight = hour < 6 || hour >= 18
+    isNight ? activateDarkMode() : activateLightMode()
+}
+} else if (t == 'light') activateLightMode()
+else activateDarkMode()
+
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://sebastiankeshuqi.github.io/2020/07/21/pythondeap/"><link rel="prev" title="进化算法-python Geatpy2库" href="http://sebastiankeshuqi.github.io/2020/07/21/pythongeatpy2/"><link rel="next" title="并查集时间复杂度分析" href="http://sebastiankeshuqi.github.io/2020/07/15/DisjointSetTimeComplexity/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://sebastiankeshuqi.github.io","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    title: 'Snackbar.bookmark.title',
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: true,
+  copyright: {"languages":{"author":"Author: Aron Ke","link":"Link: http://sebastiankeshuqi.github.io/2020/07/21/pythondeap/","source":"Source: Future Be","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: {"text":"愛你哦,十二月七,二月十四,西西","fontSize":"15px"},
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  isHome: false,
+  isPost: true
+  
+}</script><meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head><body><header> <div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Future Be</a></span><span class="toggle-menu pull_right close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> List</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li></ul></div></div></span></div></header><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">50</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">29</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">27</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> List</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li></ul></div></div></div><div id="mobile-sidebar-toc"><div class="toc_mobile_headline">Catalog</div><div class="sidebar-toc__content"><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-1"><a class="toc_mobile_items-link" href="#Introduction"><span class="toc_mobile_items-number">1.</span> <span class="toc_mobile_items-text">Introduction</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#特性"><span class="toc_mobile_items-number">1.1.</span> <span class="toc_mobile_items-text">特性</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#基本元素"><span class="toc_mobile_items-number">1.2.</span> <span class="toc_mobile_items-text">基本元素</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#格雷码"><span class="toc_mobile_items-number">1.3.</span> <span class="toc_mobile_items-text">格雷码</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#二进制转换法"><span class="toc_mobile_items-number">1.3.1.</span> <span class="toc_mobile_items-text">二进制转换法</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#汉诺塔非递归算法"><span class="toc_mobile_items-number">1.3.2.</span> <span class="toc_mobile_items-text">汉诺塔非递归算法</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-1"><a class="toc_mobile_items-link" href="#Implementation"><span class="toc_mobile_items-number">2.</span> <span class="toc_mobile_items-text">Implementation</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#定义优化问题"><span class="toc_mobile_items-number">2.1.</span> <span class="toc_mobile_items-text">定义优化问题</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#个体编码"><span class="toc_mobile_items-number">2.2.</span> <span class="toc_mobile_items-text">个体编码</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#实数编码"><span class="toc_mobile_items-number">2.2.1.</span> <span class="toc_mobile_items-text">实数编码</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#序列编码"><span class="toc_mobile_items-number">2.2.2.</span> <span class="toc_mobile_items-text">序列编码</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#粒子"><span class="toc_mobile_items-number">2.2.3.</span> <span class="toc_mobile_items-text">粒子</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#族群创建"><span class="toc_mobile_items-number">2.3.</span> <span class="toc_mobile_items-text">族群创建</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#一般族群"><span class="toc_mobile_items-number">2.3.1.</span> <span class="toc_mobile_items-text">一般族群</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#同类群"><span class="toc_mobile_items-number">2.3.2.</span> <span class="toc_mobile_items-text">同类群</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#粒子群"><span class="toc_mobile_items-number">2.3.3.</span> <span class="toc_mobile_items-text">粒子群</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#评价"><span class="toc_mobile_items-number">2.4.</span> <span class="toc_mobile_items-text">评价</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#配种选择"><span class="toc_mobile_items-number">2.5.</span> <span class="toc_mobile_items-text">配种选择</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#变异"><span class="toc_mobile_items-number">2.6.</span> <span class="toc_mobile_items-text">变异</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#交叉crossover"><span class="toc_mobile_items-number">2.6.1.</span> <span class="toc_mobile_items-text">交叉crossover</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#基因突变mutation"><span class="toc_mobile_items-number">2.6.2.</span> <span class="toc_mobile_items-text">基因突变mutation</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#环境选择"><span class="toc_mobile_items-number">2.7.</span> <span class="toc_mobile_items-text">环境选择</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#特性"><span class="toc-number">1.1.</span> <span class="toc-text">特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本元素"><span class="toc-number">1.2.</span> <span class="toc-text">基本元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格雷码"><span class="toc-number">1.3.</span> <span class="toc-text">格雷码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二进制转换法"><span class="toc-number">1.3.1.</span> <span class="toc-text">二进制转换法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#汉诺塔非递归算法"><span class="toc-number">1.3.2.</span> <span class="toc-text">汉诺塔非递归算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Implementation"><span class="toc-number">2.</span> <span class="toc-text">Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义优化问题"><span class="toc-number">2.1.</span> <span class="toc-text">定义优化问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#个体编码"><span class="toc-number">2.2.</span> <span class="toc-text">个体编码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实数编码"><span class="toc-number">2.2.1.</span> <span class="toc-text">实数编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列编码"><span class="toc-number">2.2.2.</span> <span class="toc-text">序列编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#粒子"><span class="toc-number">2.2.3.</span> <span class="toc-text">粒子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#族群创建"><span class="toc-number">2.3.</span> <span class="toc-text">族群创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一般族群"><span class="toc-number">2.3.1.</span> <span class="toc-text">一般族群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同类群"><span class="toc-number">2.3.2.</span> <span class="toc-text">同类群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#粒子群"><span class="toc-number">2.3.3.</span> <span class="toc-text">粒子群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评价"><span class="toc-number">2.4.</span> <span class="toc-text">评价</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配种选择"><span class="toc-number">2.5.</span> <span class="toc-text">配种选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变异"><span class="toc-number">2.6.</span> <span class="toc-text">变异</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#交叉crossover"><span class="toc-number">2.6.1.</span> <span class="toc-text">交叉crossover</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基因突变mutation"><span class="toc-number">2.6.2.</span> <span class="toc-text">基因突变mutation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境选择"><span class="toc-number">2.7.</span> <span class="toc-text">环境选择</span></a></li></ol></li></ol></div></div></div><main id="content-outer"><div id="top-container" style="background-image: url(https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png)"><div id="post-info"><div id="post-title"><div class="posttitle">进化算法-python deap库</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> Created 2020-07-21<span class="post-meta__separator">|</span><i class="fa fa-history fa-fw" aria-hidden="true"></i> Updated 2020-07-21</time><span class="post-meta__separator">|</span><span><i class="fa fa-inbox post-meta__icon fa-fw" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E8%BF%9B%E5%8C%96%E7%AE%97%E6%B3%95/">进化算法</a></span><div class="post-meta-wordcount"><div class="post-meta-pv-cv"><span><i class="fa fa-eye post-meta__icon fa-fw" aria-hidden="true"> </i>Post View:</span><span id="busuanzi_value_page_pv"></span></div></div></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><p>Reference: 【<a href="https://www.jianshu.com/p/8fa044ed9267】" target="_blank" rel="noopener">https://www.jianshu.com/p/8fa044ed9267】</a></p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p>作者：ChaoesLuol<br>链接：<a href="https://www.jianshu.com/p/8fa044ed9267" target="_blank" rel="noopener">https://www.jianshu.com/p/8fa044ed9267</a><br>来源：简书</p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>各类遗传算法</li>
+<li>遗传规划</li>
+<li>进化策略</li>
+<li>多目标优化</li>
+<li>多种群之间的协作与竞争</li>
+<li>并行计算</li>
+<li>计算过程中设定检查点</li>
+<li>设置基准模块，检验算法能力</li>
+<li>支持粒子群算法、差分进化算法等</li>
+</ul>
+<h2 id="基本元素"><a href="#基本元素" class="headerlink" title="基本元素"></a>基本元素</h2><blockquote>
+<ol>
+<li>个体编码(Individual representation): 将问题的解空间编码映射到搜索空间的过程。常用的编码方式有二值编码(Binary)，格雷编码(Gray)，浮点编码(Floating-point)等。</li>
+<li>评价(Evaluation): 设定一定的准则评价族群内每个个体的优秀程度。这种优秀程度通常称为适应度(Fitness)。</li>
+<li>配种选择(Mating selection): 建立准则从父代中选择个体参与育种。尽可能选择精英个体的同时也应当维护种群的多样性，避免算法过早陷入局部最优。</li>
+<li>变异(Variation): 变异过程包括一系列受到生物启发的操作，例如重组(Recombination)，突变(mutation)等。通过变异操作，父代的个体编码以一定方式继承和重新组合后，形成后代族群。</li>
+<li>环境选择(Environmental selection): 将父代与子代重组成新的族群。这个过程中育种得到的后代被重新插入到父代种群中，替换父代种群的部分或全体，形成具有与前代相近规模的新族群。</li>
+<li>停止准则(Stopping crieterion): 确定算法何时停止，通常有两种情况：算法已经找到最优解或者算法已经选入局部最优，不能继续在解空间内搜索。</li>
+</ol>
+</blockquote>
+<h2 id="格雷码"><a href="#格雷码" class="headerlink" title="格雷码"></a>格雷码</h2><p>为通信而生的二进制编码，现在常用于模拟-数字转换和位置-数字转换</p>
+<h3 id="二进制转换法"><a href="#二进制转换法" class="headerlink" title="二进制转换法"></a>二进制转换法</h3><ol>
+<li>对n位二进制的码字，从右到左，以0到n-1编号</li>
+<li>如果二进制码字的第i位和i+1位相同，则对应的格雷码的第i位为0，否则为1（当i+1=n时，二进制码字的第n位被认为是0，即第n-1位不变）</li>
+</ol>
+<p>公式表示：$G_i=B_i\oplus B_{i+1}\quad (n-1\geq i\geq 0)$</p>
+<h3 id="汉诺塔非递归算法"><a href="#汉诺塔非递归算法" class="headerlink" title="汉诺塔非递归算法"></a>汉诺塔非递归算法</h3><p>对于有n个盘子的汉诺塔问题，按序写出所有<em>n</em>位格雷码，自左而右标记为第n位, 第n-1位, …第2位, 第1位。第i 个格雷码和第i+1个格雷码的差异的位数号，即表示第i步移动的盘子的号码。</p>
+<h1 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h1><h2 id="定义优化问题"><a href="#定义优化问题" class="headerlink" title="定义优化问题"></a>定义优化问题</h2><ol>
+<li><p>单目标优化 <code>creator.create(&#39;FitnessMin&#39;, base.Fitness, weights=(-1.0, ))</code></p>
+<blockquote>
+<p>在创建单目标优化问题时，weights用来指示最大化和最小化。此处-1.0即代表问题是一个最小化问题，对于最大化，应将weights改为正数，如1.0。<br>即使是单目标优化，weights也需要是一个tuple，以保证单目标和多目标优化时数据结构的统一。<br><em>对于单目标优化问题，weights 的绝对值没有意义，只要符号选择正确即可。</em></p>
+</blockquote>
+</li>
+<li><p>多目标优化 <code>creator.create(&#39;FitnessMin&#39;, base.Fitness, weights=(-1.0, 1.0))</code></p>
+<blockquote>
+<p>对于多目标优化问题，weights用来指示多个优化目标之间的相对重要程度以及最大化最小化。如示例中给出的(-1.0, 1.0)代表对第一个目标函数取最小值，对第二个目标函数取最大值。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="个体编码"><a href="#个体编码" class="headerlink" title="个体编码"></a>个体编码</h2><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">python</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> deap <span class="keyword">import</span> base</span><br><span class="line">toolbox = base.Toolbox()</span><br></pre></td></tr></table></figure></div>
+
+<p>编码都是在toolbox里面找</p>
+<h3 id="实数编码"><a href="#实数编码" class="headerlink" title="实数编码"></a>实数编码</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><figcaption><span>random```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#96;&#96;&#96;toolbox.register(&#39;Attr_float&#39;, random.random)</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt; 优点是不用解码，基因表达非常简洁，而且能对应连续区间。但是实数编码后搜索区间连续，因此容易陷入局部最优。</span><br><span class="line"></span><br><span class="line">### 简单二进制编码</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;toolbox.register(&#39;Binary&#39;, bernoulli.rvs, 0.5)&#96;&#96;&#96; （这里用伯努利的函数来得到两点分布，其实也就是0或1的离散均匀分布）</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;toolbox.binary</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>在二进制编码中，用01两种数字模拟人类染色体中的4中碱基，用一定长度的01字符串来描述变量。其优点在于种群多样性大，但是需要解码，而且不连续，容易产生Hamming cliff（例如0111=7, 1000=8，改动了全部的4位数字之后，实际值只变动了1），在接近局部最优位置时，染色体稍有变动，就会使变量产生很大偏移（格雷编码（Gray coding）能够克服汉明距离的问题，但是实际问题复杂度较大时，格雷编码很难精确描述问题）。</p>
+<p>由于通常情况下，搜索空间都是实数空间，因此在编码时，需要建立实数空间到二进制编码空间的映射。使用二进制不能对实数空间进行连续编码，但是可以在给定精度下对连续空间进行离散化。</p>
+<p>以例子来说明如何对变量进行二进制编码，假设需要对一个在区间[-2, 2]上的变量进行二进制编码：</p>
+<p><em>选择编码长度：</em>在需要6位精度的情况下，我们需要将该区间离散为<a href="https://math.jianshu.com/math?formula=(2%2B2)*10%5E6" target="_blank" rel="noopener" data-fancybox="group" data-caption="(2+2)*10^6" class="fancybox"><img alt="(2+2)*10^6" data-src="https://math.jianshu.com/math?formula=(2%2B2)*10%5E6" class="lazyload" title="(2+2)*10^6"></a>)个数。由于<a href="https://math.jianshu.com/math?formula=2%5E%7B22%7D%3E4*10%5E6" target="_blank" rel="noopener" data-fancybox="group" data-caption="2^{22}&gt;4*10^6" class="fancybox"><img alt="2^{22}&gt;4*10^6" data-src="https://math.jianshu.com/math?formula=2%5E%7B22%7D%3E4*10%5E6" class="lazyload" title="2^{22}&gt;4*10^6"></a>，我们至少需要22位二进制数字来满足我们的精度要求。</p>
+<p><em>设置解码器：<em>将二进制数字<a href="https://math.jianshu.com/math?formula=x%5E%7Bbin%7D" target="_blank" rel="noopener" data-fancybox="group" data-caption="x^{bin}" class="fancybox"><img alt="x^{bin}" data-src="https://math.jianshu.com/math?formula=x%5E%7Bbin%7D" class="lazyload" title="x^{bin}"></a>)转化为十进制<a href="https://math.jianshu.com/math?formula=x%5E%7Bdec%7D" target="_blank" rel="noopener" data-fancybox="group" data-caption="x^{dec}" class="fancybox"><img alt="x^{dec}" data-src="https://math.jianshu.com/math?formula=x%5E%7Bdec%7D" class="lazyload" title="x^{dec}"></a>之后（在python中可以用<code>int(&#39;Binary number&#39;, 2)</code>来实现），按照公式![x = -2+x^{dec}</em>\frac{4}{2^{22}-1}](<a href="https://math.jianshu.com/math?formula=x%20%3D%20-2%2Bx%5E%7Bdec%7D" target="_blank" rel="noopener">https://math.jianshu.com/math?formula=x%20%3D%20-2%2Bx%5E%7Bdec%7D</a></em>%5Cfrac%7B4%7D%7B2%5E%7B22%7D-1%7D)解码，就可以得到一个在[-2,2]区间内的实数。</p>
+</blockquote>
+<p>二进制编码implementation实例</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">python</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> deap <span class="keyword">import</span> base, creator, tools</span><br><span class="line"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> bernoulli</span><br><span class="line"></span><br><span class="line">creator.create(<span class="string">'FitnessMin'</span>, base.Fitness, weights=(<span class="number">-1.0</span>,)) <span class="comment">#优化目标：单变量，求最小值</span></span><br><span class="line">creator.create(<span class="string">'Individual'</span>, list, fitness = creator.FitnessMin) <span class="comment">#创建Individual类，继承list</span></span><br><span class="line"></span><br><span class="line">GENE_LENGTH = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">toolbox = base.Toolbox()</span><br><span class="line">toolbox.register(<span class="string">'Binary'</span>, bernoulli.rvs, <span class="number">0.5</span>) <span class="comment">#注册一个Binary的alias，指向scipy.stats中的bernoulli.rvs，概率为0.5</span></span><br><span class="line">toolbox.register(<span class="string">'Individual'</span>, tools.initRepeat, creator.Individual, toolbox.Binary, n = GENE_LENGTH) <span class="comment">#用tools.initRepeat生成长度为GENE_LENGTH的Individual</span></span><br><span class="line"></span><br><span class="line">ind1 = toolbox.Individual()</span><br><span class="line">print(ind1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果：[1, 0, 0, 0, 0, 1, 0, 1, 1, 0]</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="序列编码"><a href="#序列编码" class="headerlink" title="序列编码"></a>序列编码</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><figcaption><span>random.sample, range(IND_SIZE), IND_SIZE)```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#96;&#96;&#96;toobox.Indices</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>常在求解顺序问题时用到，例如TSP问题。序列编码中的每个染色体都是一个序列。</p>
+</blockquote>
+<h3 id="粒子"><a href="#粒子" class="headerlink" title="粒子"></a>粒子</h3><blockquote>
+<p>粒子是一种特殊个体，主要用于粒子群算法。相比普通的个体，它额外具有速度、速度限制并且能记录最优位置。</p>
+</blockquote>
+<p>类似processing大神视频里的smart rocket</p>
+<p>implementation实例</p>
+<div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">python</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> deap <span class="keyword">import</span> base, creator, tools</span><br><span class="line"></span><br><span class="line">creator.create(<span class="string">"FitnessMax"</span>, base.Fitness, weights=(<span class="number">1.0</span>, <span class="number">1.0</span>))</span><br><span class="line">creator.create(<span class="string">"Particle"</span>, list, fitness=creator.FitnessMax, speed=<span class="literal">None</span>,</span><br><span class="line">               smin=<span class="literal">None</span>, smax=<span class="literal">None</span>, best=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义的粒子初始化函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initParticle</span><span class="params">(pcls, size, pmin, pmax, smin, smax)</span>:</span></span><br><span class="line">    part = pcls(random.uniform(pmin, pmax) <span class="keyword">for</span> _ <span class="keyword">in</span> range(size))</span><br><span class="line">    part.speed = [random.uniform(smin, smax) <span class="keyword">for</span> _ <span class="keyword">in</span> range(size)]</span><br><span class="line">    part.smin = smin</span><br><span class="line">    part.smax = smax</span><br><span class="line">    <span class="keyword">return</span> part</span><br><span class="line"></span><br><span class="line">toolbox = base.Toolbox()</span><br><span class="line">toolbox.register(<span class="string">"Particle"</span>, initParticle, creator.Particle, size=<span class="number">2</span>, pmin=<span class="number">-6</span>, pmax=<span class="number">6</span>, smin=<span class="number">-3</span>, smax=<span class="number">3</span>) <span class="comment">#为自己编写的initParticle函数注册一个alias "Particle"，调用时生成一个2维粒子，放在容器creator.Particle中，粒子的位置落在（-6,6）中，速度限制为（-3，3）</span></span><br><span class="line"></span><br><span class="line">ind1 = toolbox.Particle()</span><br><span class="line">print(ind1)</span><br><span class="line">print(ind1.speed)</span><br><span class="line">print(ind1.smin, ind1.smax)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果：[-2.176528549934324, -3.0796558214905]</span></span><br><span class="line"><span class="comment">#[-2.9943676285620104, -0.3222138308543414]</span></span><br><span class="line"><span class="comment">#-3 3</span></span><br><span class="line"></span><br><span class="line">print(ind1.fitness.valid)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果：False</span></span><br><span class="line"><span class="comment"># 因为当前还没有计算适应度函数，所以粒子的最优适应度值还是invalid</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="族群创建"><a href="#族群创建" class="headerlink" title="族群创建"></a>族群创建</h2><h3 id="一般族群"><a href="#一般族群" class="headerlink" title="一般族群"></a>一般族群</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><figcaption><span>tools.initRepeat, list, toolbox.individual)```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">生成10个长度为5的随机二进制编码个体组成的族群</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;python</span><br><span class="line">from deap import base, creator, tools</span><br><span class="line">from scipy.stats import bernoulli</span><br><span class="line"></span><br><span class="line"># 定义问题</span><br><span class="line">creator.create(&#39;FitnessMin&#39;, base.Fitness, weights&#x3D;(-1.0,)) # 单目标，最小化</span><br><span class="line">creator.create(&#39;Individual&#39;, list, fitness &#x3D; creator.FitnessMin)</span><br><span class="line"></span><br><span class="line"># 生成个体</span><br><span class="line">GENE_LENGTH &#x3D; 5</span><br><span class="line">toolbox &#x3D; base.Toolbox() #实例化一个Toolbox</span><br><span class="line">toolbox.register(&#39;Binary&#39;, bernoulli.rvs, 0.5)</span><br><span class="line">toolbox.register(&#39;Individual&#39;, tools.initRepeat, creator.Individual, toolbox.Binary, n&#x3D;GENE_LENGTH)</span><br><span class="line"></span><br><span class="line"># 生成初始族群</span><br><span class="line">N_POP &#x3D; 10</span><br><span class="line">toolbox.register(&#39;Population&#39;, tools.initRepeat, list, toolbox.Individual)</span><br><span class="line">toolbox.Population(n &#x3D; N_POP)</span><br><span class="line"></span><br><span class="line"># 结果：</span><br><span class="line"># [[1, 0, 1, 1, 0],</span><br><span class="line"># [0, 1, 1, 0, 0],</span><br><span class="line"># [0, 1, 0, 0, 0],</span><br><span class="line"># [1, 1, 0, 1, 0],</span><br><span class="line"># [0, 1, 1, 1, 1],</span><br><span class="line"># [0, 1, 1, 1, 1],</span><br><span class="line"># [1, 0, 0, 0, 1],</span><br><span class="line"># [1, 1, 0, 1, 0],</span><br><span class="line"># [0, 1, 1, 0, 1],</span><br><span class="line"># [1, 0, 0, 0, 0]]</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="同类群"><a href="#同类群" class="headerlink" title="同类群"></a>同类群</h3><blockquote>
+<p>同类群即一个族群中包含几个子族群。在有些算法中，会使用本地选择(Local selection)挑选育种个体，这种情况下个体仅与同一邻域的个体相互作用。</p>
+</blockquote>
+<p>这里应该借用的是生物学上的种群概念，同类群就是几个物种相同的种群但基因可以没有交流(Local selection)</p>
+<h3 id="粒子群"><a href="#粒子群" class="headerlink" title="粒子群"></a>粒子群</h3><blockquote>
+<p>粒子群中的所有粒子共享全局最优。在实现时需要额外传入全局最优位置与全局最优适应度给族群。</p>
+<p>在算法迭代时，需要更新该轮迭代中最优的位置和最优适应度。</p>
+</blockquote>
+<h2 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h2><blockquote>
+<p>评价部分是根据任务的特性高度定制的，DEAP库中并没有预置的评价函数模版。</p>
+<p>在使用DEAP时，需要注意的是，无论是单目标还是多目标优化，评价函数的返回值必须是一个<code>tuple</code>类型。</p>
+</blockquote>
+<h2 id="配种选择"><a href="#配种选择" class="headerlink" title="配种选择"></a>配种选择</h2><p>deap的tools模块内置了13中选择方法</p>
+<table>
+<thead>
+<tr>
+<th>selTournament()</th>
+<th>锦标赛。首先在族群中随机抽取<code>tournsize</code>个个体，然后从中选取具有最佳适应度的个体，将此过程重复<code>k</code>次，获得育种族群。<code>tournsize</code>越大，选择强度(selection intensity)越高，在选择之后留下的育种族群的平均适应度也就越高。比较常用的<code>tournsize</code>是2。相当于small batch的select Best</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>selRoulette</td>
+<td>轮盘赌。在轮盘赌选择中，每个个体<a href="https://math.jianshu.com/math?formula=a_i" target="_blank" rel="noopener" data-fancybox="group" data-caption="a_i" class="fancybox"><img alt="a_i" data-src="https://math.jianshu.com/math?formula=a_i" class="lazyload" title="a_i"></a>)被选中的概率<a href="https://math.jianshu.com/math?formula=P(a_i)" target="_blank" rel="noopener" data-fancybox="group" data-caption="P(a_i)" class="fancybox"><img alt="P(a_i)" data-src="https://math.jianshu.com/math?formula=P(a_i)" class="lazyload" title="P(a_i)"></a>)与其适应度函数<a href="https://math.jianshu.com/math?formula=f(a_i)" target="_blank" rel="noopener" data-fancybox="group" data-caption="f(a_i)" class="fancybox"><img alt="f(a_i)" data-src="https://math.jianshu.com/math?formula=f(a_i)" class="lazyload" title="f(a_i)"></a>)成正比：<a href="https://math.jianshu.com/math?formula=P(a_i)%3D%5Cfrac%7Bf(a_i)%7D%7B%5Csum_if(a_i)%7D" target="_blank" rel="noopener" data-fancybox="group" data-caption="P(a_i)=\frac{f(a_i)}{\sum_if(a_i)}" class="fancybox"><img alt="P(a_i)=\frac{f(a_i)}{\sum_if(a_i)}" data-src="https://math.jianshu.com/math?formula=P(a_i)%3D%5Cfrac%7Bf(a_i)%7D%7B%5Csum_if(a_i)%7D" class="lazyload" title="P(a_i)=\frac{f(a_i)}{\sum_if(a_i)}"></a></td>
+</tr>
+<tr>
+<td>selNSGA2()</td>
+<td>NSAGA-II，适用多目标遗传算法。全称为nondominated sorting genetic algorithm，是Kalyanmoy Deb于2002年提出的，时间复杂度为O(MN^2)，N是个体数，M是多目标的个数。该方法解决了前代NSGA的三个痛点：计算复杂度高；缺少精英选择；需要给定额外参数值。论文网址：<a href="https://www.iitk.ac.in/kangal/Deb_NSGA-II.pdf" target="_blank" rel="noopener">https://www.iitk.ac.in/kangal/Deb_NSGA-II.pdf</a></td>
+</tr>
+<tr>
+<td>selSPEA2()</td>
+<td>SPEA2</td>
+</tr>
+<tr>
+<td>selRandom()</td>
+<td>有放回的随机选择</td>
+</tr>
+<tr>
+<td>selBest()/selWorst()</td>
+<td>选最佳/最差</td>
+</tr>
+<tr>
+<td>selTournamentDCD()</td>
+<td>Dominance/Crowding distance锦标赛选择，目前版本的实现也有些问题</td>
+</tr>
+<tr>
+<td>selDoubleTournament()</td>
+<td>Size+Fitness双锦标赛选择</td>
+</tr>
+<tr>
+<td>selStochasticUniversalSampling()</td>
+<td>随机抽样选择</td>
+</tr>
+</tbody></table>
+<p>还有一些基于排序的选择算法，如linear ranking selection，exponential ranking selection(应该就是linear ranking的key套上一个exp函数来加大区分度)。这些在deap中没有给出直接的函数，需要自己实现</p>
+<h2 id="变异"><a href="#变异" class="headerlink" title="变异"></a>变异</h2><h3 id="交叉crossover"><a href="#交叉crossover" class="headerlink" title="交叉crossover"></a>交叉crossover</h3><p>不是基因重组</p>
+<table>
+<thead>
+<tr>
+<th>cxOnePoint()</th>
+<th>单点交叉（实数/二进制编码）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cxTwoPoint()</td>
+<td>两点交叉（实数/二进制编码）</td>
+</tr>
+<tr>
+<td>cxUniformPoint()</td>
+<td>均匀交叉（实数/二进制）</td>
+</tr>
+<tr>
+<td>cxPartialyMatched()</td>
+<td>部分匹配交叉PMX（序列编码）</td>
+</tr>
+<tr>
+<td>cxUniformPartialyMatched()</td>
+<td>PMX变种，改两点为均匀交叉（序列）</td>
+</tr>
+<tr>
+<td>cxOrdered()</td>
+<td>有序交叉（序列）</td>
+</tr>
+<tr>
+<td>cxBlend()</td>
+<td>混合交叉（实数）</td>
+</tr>
+<tr>
+<td>cxESBlend()</td>
+<td>带进化策略的混合交叉</td>
+</tr>
+<tr>
+<td>cxSimulatedBinary()</td>
+<td>模拟二值交叉（实数）</td>
+</tr>
+<tr>
+<td>cxSimulatedBinaryBounded()</td>
+<td>有界模拟二值交叉（实数）</td>
+</tr>
+<tr>
+<td>cxMessyOnePoint()</td>
+<td>混乱单点交叉（实数/二进制）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>单点交叉：最简单的交叉方式，选择一个切口，将两条基因切开之后，交换尾部基因段。尽管该方法非常简单，但是多篇文章指出，该算法在各种实验中性能都被其他交叉算法吊打，因此算是一种不建议使用的loser algorithm</p>
+<p>两点交叉：就把上面的切一刀改为切两刀，交换中间那段</p>
+<p>均匀交叉：遍历两个parent的每位基因，每次扔色子，如果扔中了就交换当前位的基因</p>
+<p>部分匹配交叉：</p>
+<p><a href="https://upload-images.jianshu.io/upload_images/17867674-b9913920c79990e8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/783/format/webp" target="_blank" rel="noopener" data-fancybox="group" data-caption="img" class="fancybox"><img alt="img" data-src="https://upload-images.jianshu.io/upload_images/17867674-b9913920c79990e8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/783/format/webp" class="lazyload" title="img"></a></p>
+<p>PMX：当解决路径规划问题时，如果最优sub-subrouine越长，PMX交叉后就越难在子代中保留。</p>
+<p>有序交叉：</p>
+<p><a href="https://upload-images.jianshu.io/upload_images/17867674-edcbb9ef2d1f30ce.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/753/format/webp" target="_blank" rel="noopener" data-fancybox="group" data-caption="img" class="fancybox"><img alt="img" data-src="https://upload-images.jianshu.io/upload_images/17867674-edcbb9ef2d1f30ce.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/753/format/webp" class="lazyload" title="img"></a></p>
+<p>混合交叉：</p>
+<p>混合交叉由Eshelman和Schaffer在1993年提出，常见的混合交叉算子有<a href="https://math.jianshu.com/math?formula=BLX-%5Calpha" target="_blank" rel="noopener" data-fancybox="group" data-caption="BLX-\alpha" class="fancybox"><img alt="BLX-\alpha" data-src="https://math.jianshu.com/math?formula=BLX-%5Calpha" class="lazyload" title="BLX-\alpha"></a>)与<a href="https://math.jianshu.com/math?formula=BLX-%5Calpha%5Cbeta" target="_blank" rel="noopener" data-fancybox="group" data-caption="BLX-\alpha\beta" class="fancybox"><img alt="BLX-\alpha\beta" data-src="https://math.jianshu.com/math?formula=BLX-%5Calpha%5Cbeta" class="lazyload" title="BLX-\alpha\beta"></a>两种，DEAP中内置的是前者。其具体算法如下：</p>
+<ul>
+<li>选择两个父代<a href="https://math.jianshu.com/math?formula=X%5E%7B(t)%7D" target="_blank" rel="noopener" data-fancybox="group" data-caption="X^{(t)}" class="fancybox"><img alt="X^{(t)}" data-src="https://math.jianshu.com/math?formula=X%5E%7B(t)%7D" class="lazyload" title="X^{(t)}"></a>)和<a href="https://math.jianshu.com/math?formula=Y%5E%7B(t)%7D" target="_blank" rel="noopener" data-fancybox="group" data-caption="Y^{(t)}" class="fancybox"><img alt="Y^{(t)}" data-src="https://math.jianshu.com/math?formula=Y%5E%7B(t)%7D" class="lazyload" title="Y^{(t)}"></a></li>
+<li>对基因<a href="https://math.jianshu.com/math?formula=i" target="_blank" rel="noopener" data-fancybox="group" data-caption="i" class="fancybox"><img alt="i" data-src="https://math.jianshu.com/math?formula=i" class="lazyload" title="i"></a>)，计算<a href="https://math.jianshu.com/math?formula=d_i%3D%7Cx_i%5E%7B(t)%7D%20-%20y_i%5E%7B(t)%7D%7C" target="_blank" rel="noopener" data-fancybox="group" data-caption="d_i=|x_i^{(t)} - y_i^{(t)}|" class="fancybox"><img alt="d_i=|x_i^{(t)} - y_i^{(t)}|" data-src="https://math.jianshu.com/math?formula=d_i%3D%7Cx_i%5E%7B(t)%7D%20-%20y_i%5E%7B(t)%7D%7C" class="lazyload" title="d_i=|x_i^{(t)} - y_i^{(t)}|"></a></li>
+<li>在区间$[min(x_i^{(t)},y_i^{(t)})-\alpha d_i, max(x_i^{(t)},y_i^{(t)})+\alpha d_i]$之间取随机数<a href="https://math.jianshu.com/math?formula=u_i" target="_blank" rel="noopener" data-fancybox="group" data-caption="u_i" class="fancybox"><img alt="u_i" data-src="https://math.jianshu.com/math?formula=u_i" class="lazyload" title="u_i"></a></li>
+<li>将该随机数作为子代的片段，即<a href="https://math.jianshu.com/math?formula=x_i%5E%7B(t%2B1)%7D%3Du_i" target="_blank" rel="noopener" data-fancybox="group" data-caption="x_i^{(t+1)}=u_i" class="fancybox"><img alt="x_i^{(t+1)}=u_i" data-src="https://math.jianshu.com/math?formula=x_i%5E%7B(t%2B1)%7D%3Du_i" class="lazyload" title="x_i^{(t+1)}=u_i"></a></li>
+</ul>
+<p>对于任意<a href="https://math.jianshu.com/math?formula=%5Calpha%3E0" target="_blank" rel="noopener" data-fancybox="group" data-caption="\alpha&gt;0" class="fancybox"><img alt="\alpha&gt;0" data-src="https://math.jianshu.com/math?formula=%5Calpha%3E0" class="lazyload" title="\alpha&gt;0"></a>)，混合交叉会扩张搜索空间，因此应用于受到约束的变量时需要注意。有些研究认为<a href="https://math.jianshu.com/math?formula=%5Calpha%3D0.5" target="_blank" rel="noopener" data-fancybox="group" data-caption="\alpha=0.5" class="fancybox"><img alt="\alpha=0.5" data-src="https://math.jianshu.com/math?formula=%5Calpha%3D0.5" class="lazyload" title="\alpha=0.5"></a>时，搜索效果优于其他值。</p>
+<p>模拟二值交叉SBX：</p>
+<p>SBX是在1995年由Deb和Agrawal提出来的。二进制编码有只能进行离散搜索，Hamming cliff等问题，而实数编码尽管能在连续域上操作，但是搜索能力较弱（此处搜索能力定义为给定一对父辈，产生任意子代的几率，可以用扩散系数表征）。模拟二值交叉试图综合二者的优势，在实数编码上模拟二进制编码的搜索特点。参数<a href="https://math.jianshu.com/math?formula=%5Ceta_c" target="_blank" rel="noopener" data-fancybox="group" data-caption="\eta_c" class="fancybox"><img alt="\eta_c" data-src="https://math.jianshu.com/math?formula=%5Ceta_c" class="lazyload" title="\eta_c"></a>)越大，产生的子代与父代越接近；该参数越小，产生的子代越可能与父代差距较大。作者认为SBX在较难的测试中，表现比BLX-0.5要更优，尤其在多局部最优问题中表现出色。更具体的测试可以<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fpdfs.semanticscholar.org%2Fb8ee%2F6b68520ae0291075cb1408046a7dff9dd9ad.pdf" target="_blank" rel="noopener">参见原文</a>。</p>
+<p>混乱单调交叉：</p>
+<p>混乱单点交叉源自一篇<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fpdfs.semanticscholar.org%2Fb3a9%2Fded3c3afc29e7f857d4b2b7f24c3cb555fc2.pdf" target="_blank" rel="noopener">挺有意思的文章</a>（本人猜测，未得到开发人员证实）。作者质疑为何遗传算法中的基因都是如此有序：长短一致，编码方式整整齐齐，反而在自然界中这样的规律并不多见。因而作者提出了Messy GA，在这篇文章中，他将交叉操作拆分为cut与splice。Messy Crossover与一般的单点交叉最大的不同在于序列长度不会保持，如下图所示：</p>
+</blockquote>
+<h3 id="基因突变mutation"><a href="#基因突变mutation" class="headerlink" title="基因突变mutation"></a>基因突变mutation</h3><table>
+<thead>
+<tr>
+<th>mutGaussian()</th>
+<th>高斯突变（实数）。对个体序列中的每一个基因按概率变异，变异后的值为按均值为$\mu$，方差为的$\sigma$高斯分布选取的一个随机数。如果不希望均值发生变化，则应该将$\mu$设为0。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mutShuffleIndexes()</td>
+<td>乱序突变（实数、二进制、序列）。将个体序列打乱顺序，每个基因位置变动的几率由<code>indpb</code>给出。</td>
+</tr>
+<tr>
+<td>mutFlipBit()</td>
+<td>位翻转突变（实数、二进制、序列）。对个体中的每一个基因按给定对变异概率取非。</td>
+</tr>
+<tr>
+<td>mutPolynomialBounded()</td>
+<td>有界多项式突变（实数）。多项式突变一般在多目标优化的NSGAII算法中配合使用。其具体算法如下：若$x_i\in[x^{(L)},x^{(U)}]$，突变后的个体$\overline{x_i}^{(1,t)}$由下式计算可得：$\overline{x_i}^{(1,t)}=x_{i}^{(1,t)}+(x^{(U)}-x^{(L)})\overline{\delta_i}$，其中参数$\overline{\delta_i}$服从多项式分布：$P(\delta)=0.5(\eta_m+1)(1-</td>
+</tr>
+<tr>
+<td>mutUniformInt()</td>
+<td>均匀整数突变（实数、序列）。对序列中的每一位按概率变异，变异后的值为<a href="https://math.jianshu.com/math?formula=%5Blow%2C%20up%5D" target="_blank" rel="noopener" data-fancybox="group" data-caption="[low, up]" class="fancybox"><img alt="[low, up]" data-src="https://math.jianshu.com/math?formula=%5Blow%2C%20up%5D" class="lazyload" title="[low, up]"></a>中按均匀分布随机选取的一个整数。</td>
+</tr>
+<tr>
+<td>mutESLogNormal()</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="环境选择"><a href="#环境选择" class="headerlink" title="环境选择"></a>环境选择</h2><blockquote>
+<p>环境选择也就是重插入(Reinsertion)，在选择、交叉和突变之后，得到的育种后代族群规模与父代相比可能增加或减少。为保持族群规模，需要将育种后代插入到父代中，替换父代种群的一部分个体，或者丢弃一部分育种个体。</p>
+<p>重插入分为全局重插入(Global reinsertion)和本地重插入(Local reinsertion)两种，后者只有在使用含有本地邻域的算法时使用。常见的全局重插入操作有以下四种：</p>
+<ul>
+<li>完全重插入(Pure reinsertion)：产生与父代个体数量相当的配种个体，直接用配种个体生成新一代族群。</li>
+<li>均匀重插入(Uniform reinsertion)：产生比父代个体少的配种个体，用配种个体随机均匀地替换父代个体。</li>
+<li>精英重插入(Elitist reinsertion)：产生比父代个体少的配种个体，选取配种后代中适应度最好的一些个体，插入父代中，取代适应度较低的父代个体。</li>
+<li>精英保留重插入(Fitness-based reinsertion)：产生比父代个体多的配种个体，选取其中适应度最大的配种个体形成新一代族群。</li>
+</ul>
+<p>通常来说后两种方式由于精英保留的缘故，收敛速度较快，因此比较推荐。</p>
+<p>DEAP中没有设定专门的reinsertion操作，可以用选择操作选择中的<code>selBest, selWorst,selRandom</code>来对育种族群和父代族群进行操作。</p>
+</blockquote>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Aron Ke</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://sebastiankeshuqi.github.io/2020/07/21/pythondeap/">http://sebastiankeshuqi.github.io/2020/07/21/pythondeap/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BF%9B%E5%8C%96%E7%AE%97%E6%B3%95/">进化算法    </a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button button--primary button--animated"> <i class="fa fa-qrcode"></i> Donate<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/wechat.JPG" alt="微信"><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="lazyload post-qr-code__img" src="/img/alipay.JPG" alt="支付寶"><div class="post-qr-code__desc">支付寶</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/07/21/pythongeatpy2/"><img class="prev_cover lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">Previous Post</div><div class="prev_info"><span>进化算法-python Geatpy2库</span></div></a></div><div class="next-post pull_right"><a href="/2020/07/15/DisjointSetTimeComplexity/"><img class="next_cover lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">Next Post</div><div class="next_info"><span>并查集时间复杂度分析</span></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> Recommend</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/07/21/pythongeatpy2/" title="进化算法-python Geatpy2库"><img class="relatedPosts_cover lazyload"data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-07-21</div><div class="relatedPosts_title">进化算法-python Geatpy2库</div></div></a></div></div><div class="clear_both"></div></div></div></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By Aron Ke</div><div class="framework-info"><span>Driven </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="Read Mode"></i><i class="fa fa-plus" id="font_plus" title="Increase font size"></i><i class="fa fa-minus" id="font_minus" title="Decrease font size"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="Traditional Chinese and Simplified Chinese Conversion" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="Dark Mode"></i></div><div id="rightside-config-show"><div id="rightside_config" title="Setting"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="Table of Contents" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="Back to top" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="https://cdn.jsdelivr.net/npm/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script><script src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/js/ClickShowText.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
